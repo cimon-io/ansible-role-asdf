@@ -1,0 +1,8 @@
+---
+- name: "install asdf"
+  include: "install.yml"
+  tags: [asdf, asdf-install]
+
+- name: "install plugins"
+  include: "plugins.yml"
+  tags: [asdf, asdf-plugins]

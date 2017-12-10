@@ -1,0 +1,13 @@
+---
+asdf_apps: []
+
+asdf_user: "deploy"
+
+asdf_legacy_version_file: "yes"
+
+# asdf_plugins:
+#   - name: "erlang"
+#     versions:
+#       - 18.3
+#       - 20.1
+#     global: 20.1

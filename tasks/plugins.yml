@@ -1,0 +1,35 @@
+---
+- name: "install plugins"
+  command: "bash -lc 'asdf plugin-add {{ item.name }}'"
+  with_items: "{{ asdf_plugins }}"
+  when: asdf_plugins|length > 0
+  become_user: "{{ asdf_user }}"
+  ignore_errors: True
+
+- name: "install apps"
+  command: "bash -lc 'asdf install {{ item.0.name }} {{ item.1 }}'"
+  with_subelements:
+    - "{{ asdf_plugins }}"
+    - versions
+  when: asdf_plugins|length > 0
+  become_user: "{{ asdf_user }}"
+
+- name: "set global app versions"
+  command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions[0]) }}'"
+  with_items: "{{ asdf_plugins }}"
+  when: asdf_plugins|length > 0
+  become_user: "{{ asdf_user }}"
+
+- name: "set default version"
+  command: "bash -lc 'asdf install'"
+  args:
+    chdir: "{{ asdf_user_home }}"
+  when: asdf_plugins|length > 0
+  become_user: "{{ asdf_user }}"
+
+- name: "set asdfrc"
+  template:
+    src: "asdfrc.j2"
+    dest: "{{ asdf_user_home }}/.asdfrc"
+    owner: "{{ asdf_user }}"
+    mode: 0644

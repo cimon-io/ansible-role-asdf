@@ -1,0 +1,31 @@
+---
+- name: "get users HOME"
+  getent:
+    database: passwd
+    key: "{{ asdf_user }}"
+    split: ":"
+
+- name: "set asdf_user_home variable"
+  set_fact:
+    "asdf_user_home": "{{ getent_passwd[asdf_user][4] }}"
+
+- name: "install global dependencies"
+  apt:
+    pkg: "{{ item }}"
+    install_recommends: no
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  with_items: "{{ asdf_plugin_dependencies }}"
+
+- name: "install asdf"
+  git:
+    repo: "https://github.com/asdf-vm/asdf.git"
+    dest: "{{ asdf_user_home }}/.asdf"
+    update: yes
+  become_user: "{{ asdf_user }}"
+
+- name: "add source to .profile"
+  lineinfile:
+    dest: "{{ asdf_user_home }}/.profile"
+    create: yes
+    line: "source {{ asdf_user_home }}/.asdf/asdf.sh"
+  become_user: "{{ asdf_user }}"
