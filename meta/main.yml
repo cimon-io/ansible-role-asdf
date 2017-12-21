@@ -1,6 +1,6 @@
 galaxy_info:
   author: Eugene Ignatov
-  description: install asdf (https://github.com/asdf-vm/asdf.git) and plugins
+  description: Install asdf (https://github.com/asdf-vm/asdf.git) and plugins
   company: Cimon.io
   license: MIT
 
@@ -17,4 +17,3 @@ galaxy_info:
   galaxy_tags: []
 
 dependencies: []
-
