@@ -1,8 +1,8 @@
 ---
 - name: "install asdf"
-  include: "install.yml"
+  import_tasks: "install.yml"
   tags: [asdf, asdf-install]
 
 - name: "install plugins"
-  include: "plugins.yml"
+  import_tasks: "plugins.yml"
   tags: [asdf, asdf-plugins]
