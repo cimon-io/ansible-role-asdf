@@ -23,9 +23,10 @@
     update: yes
   become_user: "{{ asdf_user }}"
 
-- name: "add source to .profile"
-  lineinfile:
-    dest: "{{ asdf_user_home }}/.profile"
-    create: yes
-    line: "source {{ asdf_user_home }}/.asdf/asdf.sh"
-  become_user: "{{ asdf_user }}"
+- name: "source asdf script"
+  template:
+    src: "asdf.sh.j2"
+    dest: "/etc/profile.d/asdf.sh"
+    owner: "root"
+    group: "root"
+    mode: 0755
