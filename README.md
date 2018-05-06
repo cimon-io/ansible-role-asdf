@@ -37,10 +37,16 @@ The variable `asdf_legacy_version_file` specifies if plugins which support this 
 asdf_legacy_version_file: "yes"
 ```
 
-To set additional plugin dependencies, use the variable `asdf_plugin_dependencies` (see `vars/main.yml`):
+The variable `asdf_plugin_dependencies` sets packages which are needed for plugins (see `defaults/main.yml`):
 
 ```yaml
 asdf_plugin_dependencies: []
+```
+
+The variable `asdf_version` sets the git tag of asdf:
+
+```yaml
+asdf_version: v0.4.3
 ```
 
 ## Dependencies
@@ -61,6 +67,52 @@ Playbook example is given below:
       global: "20.1"
     - name: "elixir"
       versions: "1.3.1"
+```
+
+A more complex example for CentOS is:
+
+```yaml
+- name: install asdf
+  hosts: '*'
+  become: true
+  vars:
+    asdf_version: v0.4.3
+    asdf_user: ci
+    asdf_plugins:
+      - name: erlang
+      - name: elixir
+      - name: nodejs
+    asdf_plugin_dependencies:
+      # Erlang
+      - gcc
+      - glibc-devel
+      - make
+      - ncurses-devel
+      - openssl-devel
+      - autoconf
+      - pam-devel
+      - perl
+
+      # Node.js
+      - gpg
+      - perl-Digest-SHA
+  roles:
+    - asdf
+  tasks:
+    - name: Set vars
+      set_fact:
+        asdf_nodejs_keyring: "{{ asdf_user_home }}/.asdf/keyrings/nodejs"
+
+    - name: create keyring for Node.js keys
+      file: path={{ asdf_nodejs_keyring }} state=directory owner={{ asdf_user }} {{ asdf_user }} mode=0700
+
+    - name: import Node.js keys to keyring
+      command: "bash -lc '{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring'"
+      args:
+        creates: "{{ asdf_nodejs_keyring }}/pubring.gpg"
+      become_user: "{{ asdf_user }}"
+      environment:
+        GNUPGHOME: "{{ asdf_nodejs_keyring }}"
 ```
 
 ## License
