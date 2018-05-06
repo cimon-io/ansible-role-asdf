@@ -15,6 +15,13 @@
     install_recommends: no
     cache_valid_time: "{{ apt_cache_valid_time }}"
   with_items: "{{ asdf_plugin_dependencies }}"
+  when: ansible_os_family == "Debian"
+
+- name: "install global dependencies"
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ asdf_plugin_dependencies }}"
+  when: ansible_os_family == "RedHat"
 
 - name: "install asdf"
   git:
