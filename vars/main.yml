@@ -1,17 +1,2 @@
 ---
-ansible_become: True
-apt_cache_valid_time: 86400
-
-asdf_plugin_dependencies:
-  - automake
-  - autoconf
-  - build-essential
-  - libreadline-dev
-  - libncurses-dev
-  - libssl-dev
-  - libyaml-dev
-  - libxslt-dev
-  - libffi-dev
-  - libtool
-  - unzip
-
+# vars file for asdf
