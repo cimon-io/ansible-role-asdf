@@ -9,7 +9,7 @@
   set_fact:
     "asdf_user_home": "{{ getent_passwd[asdf_user][4] }}"
 
-- name: "install global dependencies"
+- name: "install plugin dependencies with apt"
   apt:
     pkg: "{{ item }}"
     install_recommends: no
@@ -17,7 +17,7 @@
   with_items: "{{ asdf_plugin_dependencies }}"
   when: ansible_os_family == "Debian"
 
-- name: "install global dependencies"
+- name: "install plugin dependencies with yum"
   yum:
     name: "{{ item }}"
   with_items: "{{ asdf_plugin_dependencies }}"
@@ -27,7 +27,7 @@
   git:
     repo: "https://github.com/asdf-vm/asdf.git"
     dest: "{{ asdf_user_home }}/.asdf"
-    update: yes
+    version: "{{ asdf_version | default('HEAD') }}"
   become_user: "{{ asdf_user }}"
 
 - name: "source asdf script"
