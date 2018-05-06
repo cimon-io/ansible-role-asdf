@@ -82,7 +82,7 @@ A more complex example for CentOS is:
       - name: erlang
       - name: elixir
       - name: nodejs
-    asdf_plugin_dependencies:
+    asdf_optional_dependencies:
       # Erlang
       - gcc
       - glibc-devel

@@ -1,6 +1,6 @@
 ---
 # defaults file for asdf
-ansible_become: True
+asdf_version: "v0.4.3"
 
 asdf_plugins: []
 # asdf_plugins:
@@ -14,18 +14,4 @@ asdf_user: "deploy"
 
 asdf_legacy_version_file: "yes"
 
-# Debian
-asdf_plugin_dependencies:
-  - automake
-  - autoconf
-  - build-essential
-  - libreadline-dev
-  - libncurses-dev
-  - libssl-dev
-  - libyaml-dev
-  - libxslt-dev
-  - libffi-dev
-  - libtool
-  - unzip
-
-apt_cache_valid_time: 86400
+asdf_optional_dependencies: []
