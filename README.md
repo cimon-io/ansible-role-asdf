@@ -82,6 +82,8 @@ A more complex example for CentOS is:
       - name: erlang
       - name: elixir
       - name: nodejs
+        versions: ["8.11.3"]
+        global: "8.11.3"
     asdf_optional_dependencies:
       # Erlang
       - gcc
@@ -98,21 +100,6 @@ A more complex example for CentOS is:
       - perl-Digest-SHA
   roles:
     - asdf
-  tasks:
-    - name: Set vars
-      set_fact:
-        asdf_nodejs_keyring: "{{ asdf_user_home }}/.asdf/keyrings/nodejs"
-
-    - name: create keyring for Node.js keys
-      file: path={{ asdf_nodejs_keyring }} state=directory owner={{ asdf_user }} {{ asdf_user }} mode=0700
-
-    - name: import Node.js keys to keyring
-      command: "bash -lc '{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring'"
-      args:
-        creates: "{{ asdf_nodejs_keyring }}/pubring.gpg"
-      become_user: "{{ asdf_user }}"
-      environment:
-        GNUPGHOME: "{{ asdf_nodejs_keyring }}"
 ```
 
 ## License

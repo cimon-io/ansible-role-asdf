@@ -8,6 +8,13 @@
   become_user: "{{ asdf_user }}"
   ignore_errors: True
 
+- name: "set vars"
+  set_fact:
+    has_nodejs_plugin: ("nodejs" in "{{ asdf_plugins }}")
+
+- include_tasks: tasks/import-nodejs-keyring.yml
+  when: has_nodejs_plugin
+
 - name: "install apps"
   command: "bash -lc 'asdf install {{ item.0.name }} {{ item.1 }}'"
   args:
