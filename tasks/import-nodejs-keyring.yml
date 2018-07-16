@@ -1,12 +1,17 @@
 ---
-- name: Set vars
+- name: "set vars"
   set_fact:
     asdf_nodejs_keyring: "{{ asdf_user_home }}/.asdf/keyrings/nodejs"
 
-- name: Create keyring for Node.js keys
-  file: path={{ asdf_nodejs_keyring }} state=directory owner={{ asdf_user }} group={{ asdf_user }} mode=0700
+- name: "create keyring for Node.js keys"
+  file:
+   path: "{{ asdf_nodejs_keyring }}"
+   state: directory
+   owner: "{{ asdf_user }}"
+   group: "{{ asdf_user }}"
+   mode: 0700
 
-- name: Import Node.js keys to keyring
+- name: "import Node.js keys to keyring"
   command: "bash -lc '{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring'"
   args:
     creates: "{{ asdf_nodejs_keyring }}/pubring.gpg"
