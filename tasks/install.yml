@@ -16,20 +16,14 @@
 
 - name: "install plugin dependencies with apt"
   apt:
-    pkg: "{{ item }}"
+    name: "{{ asdf_plugin_dependencies + asdf_optional_dependencies }}"
     install_recommends: no
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_items:
-    - "{{ asdf_plugin_dependencies }}"
-    - "{{ asdf_optional_dependencies }}"
   when: ansible_os_family == "Debian"
 
 - name: "install plugin dependencies with yum"
   yum:
-    name: "{{ item }}"
-  with_items:
-    - "{{ asdf_plugin_dependencies }}"
-    - "{{ asdf_optional_dependencies }}"
+    name: "{{ asdf_plugin_dependencies + asdf_optional_dependencies }}"
   when: ansible_os_family == "RedHat"
 
 - name: "install asdf"
