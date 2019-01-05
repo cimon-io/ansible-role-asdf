@@ -13,7 +13,16 @@ galaxy_info:
     - name: Debian
       versions:
       - all
+    - name: EL
+      versions:
+      - 6
+      - 7
 
-  galaxy_tags: []
+  galaxy_tags:
+    - asdf
+    - nodejs
+    - erlang
+    - elixir
+    - ruby
 
 dependencies: []

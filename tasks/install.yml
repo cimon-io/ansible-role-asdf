@@ -15,15 +15,23 @@
     "asdf_user_home": "{{ getent_passwd[asdf_user][4] }}"
 
 - name: "install plugin dependencies with apt"
+  become: True
   apt:
     name: "{{ asdf_plugin_dependencies + asdf_optional_dependencies }}"
     install_recommends: no
     cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_result
+  until: apt_result is succeeded
   when: ansible_os_family == "Debian"
 
 - name: "install plugin dependencies with yum"
+  become: True
   yum:
     name: "{{ asdf_plugin_dependencies + asdf_optional_dependencies }}"
+  retries: "{{ remote_package_retries }}"
+  register: yum_result
+  until: yum_result is succeeded
   when: ansible_os_family == "RedHat"
 
 - name: "install asdf"
@@ -31,6 +39,7 @@
     repo: "https://github.com/asdf-vm/asdf.git"
     dest: "{{ asdf_user_home }}/.asdf"
     version: "{{ asdf_version }}"
+  become: True
   become_user: "{{ asdf_user }}"
 
 - name: "source asdf script"
@@ -40,3 +49,4 @@
     owner: "root"
     group: "root"
     mode: 0755
+  become: True

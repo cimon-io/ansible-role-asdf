@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cimon-io/ansible-role-asdf.svg?branch=master)](https://travis-ci.org/cimon-io/ansible-role-asdf)
+
 # Ansible ASDF role
 
 An Ansible Role that installs [asdf](https://github.com/asdf-vm/asdf.git) version manager with plugins.

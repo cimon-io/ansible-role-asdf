@@ -1,6 +1,6 @@
 ---
 # defaults file for asdf
-asdf_version: "v0.4.3"
+asdf_version: "v0.6.2"
 
 asdf_plugins: []
 # asdf_plugins:
