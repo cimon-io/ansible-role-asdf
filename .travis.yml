@@ -1,0 +1,20 @@
+---
+language: python
+python: "2.7"
+
+sudo: required
+dist: trusty
+services:
+- docker
+
+env:
+  matrix:
+    - IMAGE_NAME="ubuntu16.04" ANSIBLE_VERSION="2.7.4"
+    - IMAGE_NAME="ubuntu18.04" ANSIBLE_VERSION="2.7.4"
+    - IMAGE_NAME="centos7" ANSIBLE_VERSION="2.7.4"
+
+script:
+  - docker build -t $IMAGE_NAME --build-arg ANSIBLE_VERSION="$ANSIBLE_VERSION" -f tests/Dockerfile-$IMAGE_NAME .
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -3,8 +3,10 @@
   command: "bash -lc 'asdf plugin-add {{ item.name }}'"
   args:
     creates: "{{ asdf_user_home }}/.asdf/plugins/{{ item.name }}"
+    chdir: "{{ asdf_user_home }}"
   with_items: "{{ asdf_plugins }}"
   when: asdf_plugins|length > 0
+  become: True
   become_user: "{{ asdf_user }}"
   ignore_errors: True
 
@@ -12,25 +14,31 @@
   set_fact:
     has_nodejs_plugin: ("nodejs" in "{{ asdf_plugins }}")
 
-- include_tasks: tasks/import-nodejs-keyring.yml
+- name: "import nodejs keys"
+  include_tasks: "import-nodejs-keyring.yml"
   when: has_nodejs_plugin
 
 - name: "install apps"
   command: "bash -lc 'asdf install {{ item.0.name }} {{ item.1 }}'"
   args:
     creates: "{{ asdf_user_home }}/.asdf/installs/{{ item.0.name }}/{{ item.1 }}"
+    chdir: "{{ asdf_user_home }}"
   with_subelements:
     - "{{ asdf_plugins }}"
     - versions
     - flags:
       skip_missing: True
   when: asdf_plugins|length > 0
+  become: True
   become_user: "{{ asdf_user }}"
 
 - name: "set global app versions"
   command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions[0]) }}'"
+  args:
+    chdir: "{{ asdf_user_home }}"
   when: item.versions is defined
   with_items: "{{ asdf_plugins }}"
+  become: True
   become_user: "{{ asdf_user }}"
 
 - name: "set asdfrc"
@@ -39,3 +47,5 @@
     dest: "{{ asdf_user_home }}/.asdfrc"
     owner: "{{ asdf_user }}"
     mode: 0644
+  become: True
+  become_user: "{{ asdf_user }}"

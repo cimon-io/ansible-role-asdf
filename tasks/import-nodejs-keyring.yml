@@ -5,16 +5,19 @@
 
 - name: "create keyring for Node.js keys"
   file:
-   path: "{{ asdf_nodejs_keyring }}"
-   state: directory
-   owner: "{{ asdf_user }}"
-   group: "{{ asdf_user }}"
-   mode: 0700
+    path: "{{ asdf_nodejs_keyring }}"
+    state: directory
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_user }}"
+    mode: 0700
+  become: True
+  become_user: "{{ asdf_user }}"
 
 - name: "import Node.js keys to keyring"
   command: "bash -lc '{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring'"
   args:
     creates: "{{ asdf_nodejs_keyring }}/pubring.gpg"
-  become_user: "{{ asdf_user }}"
   environment:
     GNUPGHOME: "{{ asdf_nodejs_keyring }}"
+  become: True
+  become_user: "{{ asdf_user }}"

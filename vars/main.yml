@@ -1,5 +1,4 @@
 ---
 # vars file for asdf
-ansible_become: True
-
 apt_cache_valid_time: 86400
+remote_package_retries: 5
