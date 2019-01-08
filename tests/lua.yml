@@ -1,0 +1,7 @@
+---
+- hosts: all
+  roles:
+    - role: ansible-role-asdf
+      asdf_plugins:
+        - name: "lua"
+          versions: ["5.3.5"]

@@ -1,10 +1,4 @@
 ---
-- name: "include OS specific vars"
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "../vars/{{ ansible_os_family }}.yml"
-    - "../vars/os_defaults.yml"
-
 - name: "get users HOME"
   getent:
     database: passwd
@@ -15,24 +9,24 @@
   set_fact:
     "asdf_user_home": "{{ getent_passwd[asdf_user][4] }}"
 
-- name: "install plugin dependencies with apt"
-  become: True
+- name: "install asdf global dependencies with apt"
   apt:
-    name: "{{ asdf_plugin_dependencies + asdf_optional_dependencies }}"
+    name: "{{ asdf_apt_global_dependencies }}"
     install_recommends: no
     cache_valid_time: "{{ apt_cache_valid_time }}"
+  become: True
   retries: "{{ remote_package_retries }}"
-  register: apt_result
-  until: apt_result is succeeded
+  register: apt_deps_result
+  until: apt_deps_result is succeeded
   when: ansible_os_family == "Debian"
 
-- name: "install plugin dependencies with yum"
-  become: True
+- name: "install asdf global dependencies with yum"
   yum:
-    name: "{{ asdf_plugin_dependencies + asdf_optional_dependencies }}"
+    name: "{{ asdf_yum_global_dependencies }}"
+  become: True
   retries: "{{ remote_package_retries }}"
-  register: yum_result
-  until: yum_result is succeeded
+  register: yum_deps_result
+  until: yum_deps_result is succeeded
   when: ansible_os_family == "RedHat"
 
 - name: "install asdf"

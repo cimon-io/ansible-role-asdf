@@ -1,0 +1,20 @@
+---
+- name: "install php dependencies with apt"
+  apt:
+    name: "{{ asdf_apt_php_dependencies }}"
+    install_recommends: no
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_php_result
+  until: apt_php_result is succeeded
+  become: True
+  when: ansible_os_family == "Debian"
+
+- name: "install php dependencies with yum"
+  yum:
+    name: "{{ asdf_yum_php_dependencies }}"
+  retries: "{{ remote_package_retries }}"
+  register: yum_php_result
+  until: yum_php_result is succeeded
+  become: True
+  when: ansible_os_family == "RedHat"

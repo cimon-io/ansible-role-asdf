@@ -1,10 +1,11 @@
 FROM centos:7
 
 ARG ANSIBLE_VERSION="2.7.4"
-ARG PLAYBOOK_FILE="playbook.yml"
+ARG PLAYBOOK_FILE="golang.yml"
+ARG PLUGIN_EXEC="go version"
 
 RUN yum -y install epel-release && \
-    yum -y install sudo python python-devel python-pip gcc make initscripts libffi-devel openssl-devel && \
+    yum -y install sudo python python-devel python-pip gcc make initscripts libffi-devel openssl-devel procps which && \
     pip install -q cffi && \
     pip install -q ansible==$ANSIBLE_VERSION && \
     ansible --version
@@ -12,9 +13,10 @@ RUN yum -y install epel-release && \
 WORKDIR /tmp/ansible-role-asdf
 COPY  .  /tmp/ansible-role-asdf
 
-RUN useradd -m vagrant
+RUN useradd -m deploy
 RUN echo localhost > inventory
 
 RUN ansible-playbook -i inventory -c local tests/$PLAYBOOK_FILE
 
-RUN sudo -iu vagrant bash -lc 'asdf --version'
+RUN sudo -iu deploy bash -lc "asdf --version"
+RUN sudo -iu deploy bash -lc "$PLUGIN_EXEC"

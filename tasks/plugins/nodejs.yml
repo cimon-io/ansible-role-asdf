@@ -1,4 +1,24 @@
 ---
+- name: "install nodejs dependencies with apt"
+  apt:
+    name: "{{ asdf_apt_nodejs_dependencies }}"
+    install_recommends: no
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_nodejs_result
+  until: apt_nodejs_result is succeeded
+  become: True
+  when: ansible_os_family == "Debian"
+
+- name: "install nodejs dependencies with yum"
+  yum:
+    name: "{{ asdf_yum_nodejs_dependencies }}"
+  retries: "{{ remote_package_retries }}"
+  register: yum_nodejs_result
+  until: yum_nodejs_result is succeeded
+  become: True
+  when: ansible_os_family == "RedHat"
+
 - name: "set vars"
   set_fact:
     asdf_nodejs_keyring: "{{ asdf_user_home }}/.asdf/keyrings/nodejs"

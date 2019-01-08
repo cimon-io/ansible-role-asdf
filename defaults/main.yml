@@ -1,17 +1,36 @@
 ---
 # defaults file for asdf
 asdf_version: "v0.6.2"
+asdf_user: "deploy"
+asdf_legacy_version_file: "yes"
 
 asdf_plugins: []
 # asdf_plugins:
 #   - name: "erlang"
+#     repository: ""
 #     versions:
 #       - 18.3
 #       - 20.1
 #     global: 20.1
 
-asdf_user: "deploy"
+asdf_apt_global_dependencies: ["unzip", "git", "curl", "autoconf", "automake", "gcc",
+  "g++", "make", "patch", "pkg-config", "binutils", "libtool", "bison", "libreadline-dev"]
+asdf_yum_global_dependencies: ["unzip", "git", "curl", "autoconf", "automake", "gcc",
+  "gcc-c++", "make", "patch", "pkgconfig", "binutils", "libtool", "bison", "readline-devel"]
 
-asdf_legacy_version_file: "yes"
+asdf_apt_optional_dependencies: []
+asdf_yum_optional_dependencies: []
 
-asdf_optional_dependencies: []
+asdf_apt_erlang_dependencies: ["fop", "gettext", "xsltproc", "libncurses5-dev", "libssl-dev", "libxslt-dev", "libyaml-dev", "zlib1g-dev"]
+asdf_yum_erlang_dependencies: ["fop", "gettext", "libxslt", "ncurses-devel", "openssl-devel", "libxslt-devel", "libyaml-devel", "zlib-devel"]
+
+asdf_apt_nodejs_dependencies: ["gpg", "dirmngr"]
+asdf_yum_nodejs_dependencies: ["gpg", "perl-Digest-SHA"]
+
+asdf_apt_php_dependencies: ["re2c", "gettext", "libxml2-dev", "libbz2-dev", "libcurl4-openssl-dev", "zlib1g-dev",
+  "libicu-dev", "libjpeg-dev", "libpng-dev", "libwebp-dev", "libedit-dev", "libssl-dev", "libfreetype6-dev"]
+asdf_yum_php_dependencies: ["re2c", "gettext", "libxml2-devel", "bzip2-devel", "libcurl-devel", "zlib-devel",
+  "libicu-devel", "libjpeg-devel", "libpng-devel", "libwebp-devel", "libedit-devel", "openssl-devel", "libfreetype6-devel"]
+
+asdf_apt_ruby_dependencies: ["libssl-dev", "libyaml-dev", "zlib1g-dev", "libncurses5-dev", "libffi-dev"]
+asdf_yum_ruby_dependencies: ["openssl-devel", "libyaml-devel", "zlib-devel", "ncurses-devel", "libffi-devel", "bzip2"]

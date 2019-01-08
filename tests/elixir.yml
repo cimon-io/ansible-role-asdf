@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - role: ansible-role-asdf
+      asdf_plugins:
+        - name: "erlang"
+          versions: ["21.1"]
+        - name: "elixir"
+          versions: ["1.7.4"]
