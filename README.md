@@ -21,6 +21,7 @@ Each plugin can be given in the following format:
 ```yaml
 asdf_plugins:
   - name: "erlang"    # a plugin name
+    repository: ""    # a plugin repository, optional
     versions:         # a list of versions to install
       - 18.3
       - 20.1
@@ -48,7 +49,7 @@ asdf_plugin_dependencies: []
 The variable `asdf_version` sets the git tag of asdf:
 
 ```yaml
-asdf_version: v0.4.3
+asdf_version: v0.6.2
 ```
 
 ## Dependencies
@@ -78,7 +79,7 @@ A more complex example for CentOS is:
   hosts: '*'
   become: true
   vars:
-    asdf_version: v0.4.3
+    asdf_version: v0.6.2
     asdf_user: ci
     asdf_plugins:
       - name: erlang
@@ -86,20 +87,6 @@ A more complex example for CentOS is:
       - name: nodejs
         versions: ["8.11.3"]
         global: "8.11.3"
-    asdf_optional_dependencies:
-      # Erlang
-      - gcc
-      - glibc-devel
-      - make
-      - ncurses-devel
-      - openssl-devel
-      - autoconf
-      - pam-devel
-      - perl
-
-      # Node.js
-      - gpg
-      - perl-Digest-SHA
   roles:
     - asdf
 ```
