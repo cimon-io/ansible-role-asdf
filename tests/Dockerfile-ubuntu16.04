@@ -1,10 +1,11 @@
 FROM ubuntu:16.04
 
 ARG ANSIBLE_VERSION="2.7.4"
-ARG PLAYBOOK_FILE="playbook.yml"
+ARG PLAYBOOK_FILE="golang.yml"
+ARG PLUGIN_EXEC="go version"
 
 RUN apt-get update -qq && \
-    apt-get install -qq sudo python-apt python-pycurl python-pip python-dev libffi-dev libssl-dev && \
+    apt-get install -qq sudo python-apt python-pycurl python-pip python-dev libffi-dev libssl-dev procps && \
     pip install -U setuptools && \
     pip install -q ansible==$ANSIBLE_VERSION && \
     ansible --version
@@ -12,9 +13,10 @@ RUN apt-get update -qq && \
 WORKDIR /tmp/ansible-role-asdf
 COPY  .  /tmp/ansible-role-asdf
 
-RUN useradd -m vagrant
+RUN useradd -m deploy
 RUN echo localhost > inventory
 
 RUN ansible-playbook -i inventory -c local tests/$PLAYBOOK_FILE
 
-RUN sudo -iu vagrant bash -lc 'asdf --version'
+RUN sudo -iu deploy bash -lc "asdf --version"
+RUN sudo -iu deploy bash -lc "$PLUGIN_EXEC"

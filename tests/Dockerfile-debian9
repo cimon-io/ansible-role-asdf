@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM debian:9
 
 ARG ANSIBLE_VERSION="2.7.4"
 ARG PLAYBOOK_FILE="golang.yml"

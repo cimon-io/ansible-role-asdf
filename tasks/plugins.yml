@@ -1,6 +1,26 @@
 ---
+- name: "install plugin dependencies with apt"
+  apt:
+    name: "{{ asdf_apt_optional_dependencies }}"
+    install_recommends: no
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_result
+  until: apt_result is succeeded
+  become: True
+  when: ansible_os_family == "Debian"
+
+- name: "install plugin dependencies with yum"
+  yum:
+    name: "{{ asdf_yum_optional_dependencies }}"
+  retries: "{{ remote_package_retries }}"
+  register: yum_result
+  until: yum_result is succeeded
+  become: True
+  when: ansible_os_family == "RedHat"
+
 - name: "install plugins"
-  command: "bash -lc 'asdf plugin-add {{ item.name }}'"
+  command: "bash -lc 'asdf plugin-add {{ item.name }} {{ item.repository | default() }}'"
   args:
     creates: "{{ asdf_user_home }}/.asdf/plugins/{{ item.name }}"
     chdir: "{{ asdf_user_home }}"
@@ -10,13 +30,25 @@
   become_user: "{{ asdf_user }}"
   ignore_errors: True
 
-- name: "set vars"
-  set_fact:
-    has_nodejs_plugin: ("nodejs" in "{{ asdf_plugins }}")
+- name: "nodejs specific tasks"
+  include_tasks: "plugins/nodejs.yml"
+  when: '"nodejs" in item["name"]'
+  with_items: "{{ asdf_plugins }}"
 
-- name: "import nodejs keys"
-  include_tasks: "import-nodejs-keyring.yml"
-  when: has_nodejs_plugin
+- name: "erlang specific tasks"
+  include_tasks: "plugins/erlang.yml"
+  when: '"erlang" in item["name"]'
+  with_items: "{{ asdf_plugins }}"
+
+- name: "ruby specific tasks"
+  include_tasks: "plugins/ruby.yml"
+  when: '"ruby" in item["name"]'
+  with_items: "{{ asdf_plugins }}"
+
+- name: "php specific tasks"
+  include_tasks: "plugins/php.yml"
+  when: '"php" in item["name"]'
+  with_items: "{{ asdf_plugins }}"
 
 - name: "install apps"
   command: "bash -lc 'asdf install {{ item.0.name }} {{ item.1 }}'"
