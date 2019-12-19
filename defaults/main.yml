@@ -1,6 +1,6 @@
 ---
 # defaults file for asdf
-asdf_version: "v0.6.2"
+asdf_version: "v0.7.6"
 asdf_user: "deploy"
 asdf_legacy_version_file: "yes"
 
@@ -11,6 +11,7 @@ asdf_plugins: []
 #     versions:
 #       - 18.3
 #       - 20.1
+#     delete_versions: []
 #     global: 20.1
 
 asdf_apt_global_dependencies: ["unzip", "git", "curl", "autoconf", "automake", "gcc",
