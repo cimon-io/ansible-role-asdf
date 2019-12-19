@@ -64,8 +64,22 @@
   become: True
   become_user: "{{ asdf_user }}"
 
+- name: "uninstall apps"
+  command: "bash -lc 'asdf uninstall {{ item.0.name }} {{ item.1 }}'"
+  args:
+    removes: "{{ asdf_user_home }}/.asdf/installs/{{ item.0.name }}/{{ item.1 }}"
+    chdir: "{{ asdf_user_home }}"
+  with_subelements:
+    - "{{ asdf_plugins }}"
+    - delete_versions
+    - flags:
+      skip_missing: True
+  when: asdf_plugins|length > 0
+  become: True
+  become_user: "{{ asdf_user }}"
+
 - name: "set global app versions"
-  command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions[0]) }}'"
+  command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions) | sort | first) }}'"
   args:
     chdir: "{{ asdf_user_home }}"
   when: item.versions is defined
