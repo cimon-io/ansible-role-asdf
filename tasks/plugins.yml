@@ -79,7 +79,7 @@
   become_user: "{{ asdf_user }}"
 
 - name: "set global app versions"
-  command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions) | sort | first) }}'"
+  command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'"
   args:
     chdir: "{{ asdf_user_home }}"
   when: item.versions is defined
