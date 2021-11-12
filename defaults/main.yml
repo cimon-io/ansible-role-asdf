@@ -1,6 +1,6 @@
 ---
 # defaults file for asdf
-asdf_version: "v0.7.6"
+asdf_version: "v0.8.1"
 asdf_user: "deploy"
 asdf_legacy_version_file: "yes"
 

@@ -1,6 +1,6 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
-ARG ANSIBLE_VERSION="2.7.4"
+ARG ANSIBLE_VERSION="4.8.0"
 ARG PLAYBOOK_FILE="golang.yml"
 ARG PLUGIN_EXEC="go version"
 

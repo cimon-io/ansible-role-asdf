@@ -4,4 +4,4 @@
     - role: ansible-role-asdf
       asdf_plugins:
         - name: "ruby"
-          versions: ["2.6.0"]
+          versions: ["3.0.0"]

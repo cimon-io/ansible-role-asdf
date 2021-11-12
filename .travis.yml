@@ -1,32 +1,26 @@
 ---
-language: python
-python: "2.7"
-
+dist: bionic
 sudo: required
-dist: trusty
 services:
 - docker
 
 env:
   matrix:
-    - IMAGE_NAME="debian9" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="golang.yml" PLUGIN_EXEC="go version"
-    - IMAGE_NAME="ubuntu18.04" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="golang.yml" PLUGIN_EXEC="go version"
-    - IMAGE_NAME="centos7" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="golang.yml" PLUGIN_EXEC="go version"
-    - IMAGE_NAME="debian9" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="elixir.yml" PLUGIN_EXEC="elixir --version"
-    - IMAGE_NAME="ubuntu18.04" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="elixir.yml" PLUGIN_EXEC="elixir --version"
-    - IMAGE_NAME="centos7" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="elixir.yml" PLUGIN_EXEC="elixir --version"
-    - IMAGE_NAME="debian9" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="ruby.yml" PLUGIN_EXEC="ruby --version"
-    - IMAGE_NAME="ubuntu18.04" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="ruby.yml" PLUGIN_EXEC="ruby --version"
-    - IMAGE_NAME="centos7" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="ruby.yml" PLUGIN_EXEC="ruby --version"
-    #- IMAGE_NAME="debian9" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="php.yml" PLUGIN_EXEC="php --version"
-    #- IMAGE_NAME="ubuntu18.04" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="php.yml" PLUGIN_EXEC="php --version"
-    #- IMAGE_NAME="centos7" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="php.yml" PLUGIN_EXEC="php --version"
-    - IMAGE_NAME="debian9" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="nodejs.yml" PLUGIN_EXEC="node --version"
-    - IMAGE_NAME="ubuntu18.04" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="nodejs.yml" PLUGIN_EXEC="node --version"
-    - IMAGE_NAME="centos7" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="nodejs.yml" PLUGIN_EXEC="node --version"
-    - IMAGE_NAME="debian9" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="lua.yml" PLUGIN_EXEC="lua -v"
-    - IMAGE_NAME="ubuntu18.04" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="lua.yml" PLUGIN_EXEC="lua -v"
-    - IMAGE_NAME="centos7" ANSIBLE_VERSION="2.7.4" PLAYBOOK_FILE="lua.yml" PLUGIN_EXEC="lua -v"
+    - IMAGE_NAME="debian10" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="golang.yml" PLUGIN_EXEC="go version"
+    - IMAGE_NAME="ubuntu20.04" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="golang.yml" PLUGIN_EXEC="go version"
+    - IMAGE_NAME="centos7" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="golang.yml" PLUGIN_EXEC="go version"
+    - IMAGE_NAME="debian10" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="elixir.yml" PLUGIN_EXEC="elixir --version"
+    - IMAGE_NAME="ubuntu20.04" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="elixir.yml" PLUGIN_EXEC="elixir --version"
+    - IMAGE_NAME="centos7" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="elixir.yml" PLUGIN_EXEC="elixir --version"
+    - IMAGE_NAME="debian10" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="ruby.yml" PLUGIN_EXEC="ruby --version"
+    - IMAGE_NAME="ubuntu20.04" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="ruby.yml" PLUGIN_EXEC="ruby --version"
+    - IMAGE_NAME="centos7" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="ruby.yml" PLUGIN_EXEC="ruby --version"
+    - IMAGE_NAME="debian10" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="nodejs.yml" PLUGIN_EXEC="node --version"
+    - IMAGE_NAME="ubuntu20.04" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="nodejs.yml" PLUGIN_EXEC="node --version"
+    - IMAGE_NAME="centos7" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="nodejs.yml" PLUGIN_EXEC="node --version"
+    - IMAGE_NAME="debian10" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="lua.yml" PLUGIN_EXEC="lua -v"
+    - IMAGE_NAME="ubuntu20.04" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="lua.yml" PLUGIN_EXEC="lua -v"
+    - IMAGE_NAME="centos7" ANSIBLE_VERSION="4.8.0" PLAYBOOK_FILE="lua.yml" PLUGIN_EXEC="lua -v"
 
 script:
   - docker build -t $IMAGE_NAME --build-arg ANSIBLE_VERSION="$ANSIBLE_VERSION" --build-arg PLAYBOOK_FILE="$PLAYBOOK_FILE" --build-arg PLUGIN_EXEC="$PLUGIN_EXEC" -f tests/Dockerfile-$IMAGE_NAME .
