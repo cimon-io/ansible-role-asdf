@@ -23,6 +23,11 @@
   set_fact:
     asdf_nodejs_keyring: "{{ asdf_user_home }}/.asdf/keyrings/nodejs"
 
+- name: Check if Node.js keys need to be imported
+  stat:
+    path: "{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring"
+  register: import_keyring_binary
+
 - name: "create keyring for Node.js keys"
   file:
     path: "{{ asdf_nodejs_keyring }}"
@@ -32,6 +37,7 @@
     mode: 0700
   become: True
   become_user: "{{ asdf_user }}"
+  when: import_keyring_binary.stat.exists
 
 - name: "import Node.js keys to keyring"
   command: "bash -lc '{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring'"
@@ -41,3 +47,4 @@
     GNUPGHOME: "{{ asdf_nodejs_keyring }}"
   become: True
   become_user: "{{ asdf_user }}"
+  when: import_keyring_binary.stat.exists
