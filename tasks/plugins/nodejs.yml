@@ -26,6 +26,8 @@
 - name: Check if Node.js keys need to be imported
   stat:
     path: "{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring"
+  become: True
+  become_user: "{{ asdf_user }}" 
   register: import_keyring_binary
 
 - name: "create keyring for Node.js keys"
