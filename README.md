@@ -34,6 +34,15 @@ The variable `asdf_user` sets a user for which the role is installed:
 asdf_user: "deploy"
 ```
 
+By default the role installs `asdf` and its plugins in the `~/.asdf` for this
+user. This behaviour can be changed by setting `asdf_dir`. This is useful in
+situations where multiple users need access to installed plugins and tools (e.g.
+a deploy user, the app user, and possibly developer users).
+
+```yaml
+asdf_dir: "/opt/asdf-vm"
+```
+
 The variable `asdf_legacy_version_file` specifies if plugins which support this feature should read the version files used by other version managers (e.g. `.ruby-version` in the case of Ruby's rbenv).
 
 ```yaml
@@ -49,7 +58,7 @@ asdf_plugin_dependencies: []
 The variable `asdf_version` sets the git tag of asdf:
 
 ```yaml
-asdf_version: v0.6.2
+asdf_version: v0.9.0
 ```
 
 ## Dependencies
@@ -81,6 +90,26 @@ A more complex example for CentOS is:
   vars:
     asdf_version: v0.6.2
     asdf_user: ci
+    asdf_plugins:
+      - name: erlang
+      - name: elixir
+      - name: nodejs
+        versions: ["8.11.3"]
+        global: "8.11.3"
+  roles:
+    - asdf
+```
+
+Installing asdf into a shared directory accessible to the `developers` group:
+
+```yaml
+- name: install asdf
+  hosts: '*'
+  become: true
+  vars:
+    asdf_user: deploy
+    asdf_group: developers
+    asdf_dir: /opt/asdf-vm
     asdf_plugins:
       - name: erlang
       - name: elixir
