@@ -20,12 +20,11 @@
   when: ansible_os_family == "RedHat"
 
 - name: "install plugins"
-  command: "bash -lc 'asdf plugin-add {{ item.name }} {{ item.repository | default() }}'"
+  command: "bash -lc 'source /etc/profile.d/asdf.sh && asdf plugin-add {{ item.name }} {{ item.repository | default() }}'"
   args:
-    creates: "{{ asdf_user_home }}/.asdf/plugins/{{ item.name }}"
-    chdir: "{{ asdf_user_home }}"
+    creates: "{{ asdf_dir }}/plugins/{{ item.name }}"
   with_items: "{{ asdf_plugins }}"
-  when: asdf_plugins|length > 0
+  when: asdf_plugins | length > 0
   become: True
   become_user: "{{ asdf_user }}"
   ignore_errors: True
@@ -51,37 +50,33 @@
   with_items: "{{ asdf_plugins }}"
 
 - name: "install apps"
-  command: "bash -lc 'asdf install {{ item.0.name }} {{ item.1 }}'"
+  command: "bash -lc 'source /etc/profile.d/asdf.sh && asdf install {{ item.0.name }} {{ item.1 }}'"
   args:
-    creates: "{{ asdf_user_home }}/.asdf/installs/{{ item.0.name }}/{{ item.1 }}"
-    chdir: "{{ asdf_user_home }}"
+    creates: "{{ asdf_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
     - "{{ asdf_plugins }}"
     - versions
     - flags:
       skip_missing: True
-  when: asdf_plugins|length > 0
+  when: asdf_plugins | length > 0
   become: True
   become_user: "{{ asdf_user }}"
 
 - name: "uninstall apps"
-  command: "bash -lc 'asdf uninstall {{ item.0.name }} {{ item.1 }}'"
+  command: "bash -lc 'source /etc/profile.d/asdf.sh && asdf uninstall {{ item.0.name }} {{ item.1 }}'"
   args:
-    removes: "{{ asdf_user_home }}/.asdf/installs/{{ item.0.name }}/{{ item.1 }}"
-    chdir: "{{ asdf_user_home }}"
+    removes: "{{ asdf_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
     - "{{ asdf_plugins }}"
     - delete_versions
     - flags:
       skip_missing: True
-  when: asdf_plugins|length > 0
+  when: asdf_plugins | length > 0
   become: True
   become_user: "{{ asdf_user }}"
 
 - name: "set global app versions"
-  command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'"
-  args:
-    chdir: "{{ asdf_user_home }}"
+  command: "bash -lc 'source /etc/profile.d/asdf.sh && asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'"
   when: item.versions is defined
   with_items: "{{ asdf_plugins }}"
   become: True
@@ -90,8 +85,18 @@
 - name: "set asdfrc"
   template:
     src: "asdfrc.j2"
-    dest: "{{ asdf_user_home }}/.asdfrc"
+    dest: "{{ asdf_config_file }}"
     owner: "{{ asdf_user }}"
+    group: "{{ asdf_group }}"
     mode: 0644
   become: True
   become_user: "{{ asdf_user }}"
+
+- name: "set group permissions"
+  become: yes
+  file:
+    path: "{{ asdf_dir }}"
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_group }}"
+    state: directory
+    recurse: yes

@@ -21,11 +21,11 @@
 
 - name: "set vars"
   set_fact:
-    asdf_nodejs_keyring: "{{ asdf_user_home }}/.asdf/keyrings/nodejs"
+    asdf_nodejs_keyring: "{{ asdf_dir }}/keyrings/nodejs"
 
 - name: Check if Node.js keys need to be imported
   stat:
-    path: "{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring"
+    path: "{{ asdf_dir }}/plugins/nodejs/bin/import-release-team-keyring"
   register: import_keyring_binary
 
 - name: "create keyring for Node.js keys"
@@ -33,14 +33,14 @@
     path: "{{ asdf_nodejs_keyring }}"
     state: directory
     owner: "{{ asdf_user }}"
-    group: "{{ asdf_user }}"
+    group: "{{ asdf_group }}"
     mode: 0700
   become: True
   become_user: "{{ asdf_user }}"
   when: import_keyring_binary.stat.exists
 
 - name: "import Node.js keys to keyring"
-  command: "bash -lc '{{ asdf_user_home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring'"
+  command: "bash -lc '{{ asdf_dir }}/plugins/nodejs/bin/import-release-team-keyring'"
   args:
     creates: "{{ asdf_nodejs_keyring }}/pubring.gpg"
   environment:
