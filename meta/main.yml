@@ -24,5 +24,6 @@ galaxy_info:
     - erlang
     - elixir
     - ruby
+    - python
 
 dependencies: []

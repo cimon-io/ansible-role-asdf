@@ -49,8 +49,13 @@
   when: '"php" in item["name"]'
   with_items: "{{ asdf_plugins }}"
 
+- name: "python specific tasks"
+  include_tasks: "plugins/python.yml"
+  when: '"python" in item["name"]'
+  with_items: "{{ asdf_plugins }}"
+
 - name: "install apps"
-  command: "bash -lc 'source /etc/profile.d/asdf.sh && asdf install {{ item.0.name }} {{ item.1 }}'"
+  command: "bash -lc 'source /etc/profile.d/asdf.sh && {{ item.0.env | default() }} asdf install {{ item.0.name }} {{ item.1 }}'"
   args:
     creates: "{{ asdf_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
