@@ -38,3 +38,8 @@ asdf_yum_php_dependencies: ["re2c", "gettext", "libxml2-devel", "bzip2-devel", "
 
 asdf_apt_ruby_dependencies: ["libssl-dev", "libyaml-dev", "zlib1g-dev", "libncurses5-dev", "libffi-dev"]
 asdf_yum_ruby_dependencies: ["openssl-devel", "libyaml-devel", "zlib-devel", "ncurses-devel", "libffi-devel", "bzip2"]
+
+asdf_apt_python_dependencies: ["clang", "build-essential",  "libssl-dev", "zlib1g-dev", "libbz2-dev", "libsqlite3-dev", "wget", "llvm", 
+  "libncursesw5-dev", "xz-utils", "tk-dev", "libxml2-dev", "libxmlsec1-dev", "libffi-dev", "liblzma-dev"]
+asdf_yum_python_dependencies: ["clang", "zlib-devel", "bzip2", "bzip2-devel", "sqlite", "sqlite-devel", "openssl-devel", "tk-devel", 
+  "libffi-devel", "xz-devel"]

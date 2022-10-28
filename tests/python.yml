@@ -1,0 +1,8 @@
+---
+- hosts: all
+  roles:
+    - role: ansible-role-asdf
+      asdf_plugins:
+        - name: "python"
+          versions: ["3.6.8"]
+          env: "CC=clang"

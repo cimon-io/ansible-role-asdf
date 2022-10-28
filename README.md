@@ -25,6 +25,7 @@ asdf_plugins:
     versions:         # a list of versions to install
       - 18.3
       - 20.1
+    env: "CC=clang"   # environment variables to be set for the installation, optional
     global: 20.1      # set as a global version, optional
 ```
 
@@ -79,6 +80,19 @@ Playbook example is given below:
       global: "20.1"
     - name: "elixir"
       versions: "1.3.1"
+```
+
+Providing environment variables to the install:
+
+```yaml
+- hosts: web
+  roles:
+  - role: ansible-role-asdf
+    asdf_plugins:
+    - name: "python"
+      versions: ["3.6.8", "3.10.8"]
+      env: "CC=clang"
+      global: "3.6.8"
 ```
 
 A more complex example for CentOS is:
