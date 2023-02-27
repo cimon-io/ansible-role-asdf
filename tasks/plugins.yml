@@ -75,9 +75,24 @@
   become: True
   become_user: "{{ asdf_user }}"
 
-- name: "set global app versions"
-  command: "bash -lc 'source /etc/profile.d/asdf.sh && asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'"
+- name: "check global app versions"
+  shell: |
+    source /etc/profile.d/asdf.sh
+    cat $ASDF_DEFAULT_TOOL_VERSIONS_FILENAME | grep "^${TOOL_NAME}\s*" | grep "\s*${TOOL_VERSION}\(\s*\|$\)" | tr -s "[:blank:]" _
+  args:
+    executable: /bin/bash
   when: item.versions is defined
+  with_items: "{{ asdf_plugins }}"
+  register: asdf_global
+  changed_when: false
+  become: True
+  become_user: "{{ asdf_user }}"
+
+- name: "set missing global app versions"
+  command: "bash -lc 'source /etc/profile.d/asdf.sh && asdf global {{ item.name }} {{ item | get_asdf_global_version }}'"
+  when: >
+    item.versions is defined
+    and '_'.join((item.name,  item | get_asdf_global_version | string)) not in (asdf_global.results|map(attribute="stdout_lines") | list | flatten)
   with_items: "{{ asdf_plugins }}"
   become: True
   become_user: "{{ asdf_user }}"
