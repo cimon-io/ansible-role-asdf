@@ -78,7 +78,7 @@
 - name: "check global app versions"
   shell: |
     source /etc/profile.d/asdf.sh
-    cat {{ ansible_env.ASDF_DEFAULT_TOOL_VERSIONS_FILENAME }} | grep "^${TOOL_NAME}\s*" | grep "\s*${TOOL_VERSION}\(\s*\|$\)" | tr -s "[:blank:]" _
+    cat $ASDF_DEFAULT_TOOL_VERSIONS_FILENAME | grep "^${TOOL_NAME}\s*" | grep "\s*${TOOL_VERSION}\(\s*\|$\)" | tr -s "[:blank:]" _
   args:
     executable: /bin/bash
   when: item.versions is defined
